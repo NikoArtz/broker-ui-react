@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import axios from 'axios';
 import Login from './Login';
+import {isValidToken} from '../services/common';
 
 const ProtectedContent = ({ handleLogout, handleProtectedRequest }) => {
   return (
@@ -20,10 +21,7 @@ const MainPage = () => {
     // Check token expiration and log out if expired
     const checkTokenExpiration = () => {
       if (token) {
-        const decodedToken = parseJwt(token);
-        const currentTime = Math.floor(Date.now() / 1000);
-
-        if (decodedToken.exp < currentTime) {
+        if (!isValidToken(token)) {
           handleLogout();
         }
       }
@@ -32,13 +30,10 @@ const MainPage = () => {
     checkTokenExpiration();
   }, [token]);
 
-  const parseJwt = (token) => {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace('-', '+').replace('_', '/');
-    return JSON.parse(atob(base64));
-  };
+
 
   const handleLogin = (receivedToken) => {
+    console.log('handleLogin123', receivedToken);
     setToken(receivedToken);
     localStorage.setItem('token', receivedToken);
   };

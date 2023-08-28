@@ -9,6 +9,7 @@ const Login = ({ onLogin }) => {
 
   const handleLogin = async () => {
     try {
+      console.log('handleLoginAnother');
       const response = await axios.post('http://localhost:8080/auth', {
         username,
         password,
