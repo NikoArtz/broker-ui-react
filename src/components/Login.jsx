@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const Login = ({ onLogin }) => {
+export default function Login({setTokenIsValid  }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -18,8 +18,11 @@ const Login = ({ onLogin }) => {
       const receivedToken = response.data.accessToken; // Assuming the token is in the response
       //   setToken(receivedToken);
       localStorage.setItem('token', receivedToken);
-      onLogin(receivedToken);
-      navigate('/');
+      // onLogin(receivedToken);
+         setTokenIsValid(true);
+       navigate('/');
+   
+      console.log('handleLoginAnother2');
     } catch (error) {
       console.error('Login error:', error);
     }
@@ -30,7 +33,7 @@ const Login = ({ onLogin }) => {
     <div>
       <input
         type="text"
-        placeholder="Username1"
+        placeholder="Username"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
       />
@@ -42,10 +45,7 @@ const Login = ({ onLogin }) => {
       />
       <button onClick={
         handleLogin
-
       }>Login</button>
     </div>
   );
 };
-
-export default Login;
